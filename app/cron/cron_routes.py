@@ -1,5 +1,5 @@
 from apscheduler.triggers.cron import CronTrigger
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, HTTPException
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.cron.schemas import StartCronRequest
 from app.utils.settings import settings
@@ -22,8 +22,8 @@ async def start_cron(payload: StartCronRequest):
             raise HTTPException(status_code=400,
                                 detail='A job is already running. Please stop it before starting a new one')
 
-    scheduler.add_job(youtube_helper.fetch_data, trigger=CronTrigger.from_crontab(cron_interval), args=[search_key],
-                      id=settings.SCHEDULER_JOB_ID)
+    scheduler.add_job(youtube_helper.fetch_data, trigger=CronTrigger.from_crontab(cron_interval),
+                      args=[search_key, cron_interval], id=settings.SCHEDULER_JOB_ID)
     scheduler.start()
     return {"detail": f"Cron scheduler started successfully with cron interval '{cron_interval}' "
                       f"and search key '{search_key}'"}
@@ -45,7 +45,7 @@ async def modify_cron(payload: StartCronRequest):
 
         if job:
             scheduler.pause()
-            job.modify(trigger=CronTrigger.from_crontab(cron_interval), args=[search_key])
+            job.modify(trigger=CronTrigger.from_crontab(cron_interval), args=[search_key, cron_interval])
             scheduler.resume()
             return {"detail": f"Cron scheduler modified successfully with cron interval '{cron_interval}' "
                               f"and search key '{search_key}'"}

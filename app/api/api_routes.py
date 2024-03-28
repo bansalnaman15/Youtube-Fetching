@@ -1,6 +1,10 @@
 from fastapi import APIRouter, HTTPException, Query
+from tortoise.expressions import Q
+
 from app.db.videos import Videos
 import re
+
+from app.utils.settings import settings
 
 api_router = APIRouter()
 
@@ -15,12 +19,14 @@ def fetch_results():
     return
 
 
-@api_router.post('/search')
+@api_router.get('/search')
 async def search_results(query: str, page: int = Query(1, ge=1)):
-    page_size = 10
-    processed_query = ' & '.join(re.findall(r'\w+', query.lower()))
+    page_size = settings.PAGE_SIZE
+    processed_query = ' | '.join(re.findall(r'\w+', query.lower()))
     try:
-        videos = await Videos.filter(title__search=processed_query).order_by('-id').all().values()
+        videos = await Videos.filter(
+            Q(title__search=processed_query) | Q(description__search=processed_query)
+        ).order_by('-id').all().values()
 
         start_idx = (page - 1) * page_size
         end_idx = start_idx + page_size

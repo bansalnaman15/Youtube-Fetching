@@ -3,8 +3,10 @@ from cron_validator import CronValidator
 
 
 class StartCronRequest(BaseModel):
-    cron_interval: str = Field(..., title="Cron Interval", description="Interval for the cron job")
-    search_key: str = Field(..., title="Search Key", description="Search key for fetching data")
+    cron_interval: str = Field(..., title="Cron Interval", description="Interval for the cron job",
+                               example="* * * * *")
+    search_key: str = Field(..., title="Search Key", description="Search key for fetching data",
+                            example="racing cars")
 
     @field_validator('cron_interval')
     def validate_cron_interval(cls, value):

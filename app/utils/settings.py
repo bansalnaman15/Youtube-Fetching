@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     SCHEDULER_JOB_ID: str = "FETCH_DATA"
     POSTGRES_PASSWORD: str = config('POSTGRES_PASSWORD')
     POSTGRES_DB: str = config('POSTGRES_DB')
+    PAGE_SIZE: int = 5
 
 
 settings = Settings()
