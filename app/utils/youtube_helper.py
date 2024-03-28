@@ -63,7 +63,8 @@ def call_youtube_api(search_key, since_time, till_time, api_key):
         part='snippet',
         type='video',
         publishedAfter=since_time.strftime('%Y-%m-%dT%H:%M:%SZ'),
-        maxResults=50
+        maxResults=50,
+        order='date'
     )
     response = request.execute()
     videos = []
