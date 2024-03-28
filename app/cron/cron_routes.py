@@ -41,7 +41,7 @@ async def start_cron(payload: StartCronRequest):
 
 
 def stop_cron():
-    scheduler.shutdown()
+    scheduler.shutdown(wait=True)
     print("Cron scheduler stopped successfully")
 
 
