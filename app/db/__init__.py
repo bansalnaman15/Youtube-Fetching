@@ -1,30 +1,16 @@
-import logging
 from tortoise import Tortoise
 from tortoise.transactions import in_transaction
 
 from app.utils.settings import settings
 
-logger = logging.getLogger(__name__)
-
 
 async def init_db():
-    try:
-        await Tortoise.init(
-            db_url=f'postgres://postgres:{settings.POSTGRES_PASSWORD}@postgres:5432/{settings.POSTGRES_DB}',
-            modules={'models': ['app.db.videos']},
-        )
-        logger.info("Tortoise ORM initialized successfully")
-    except Exception as e:
-        logger.error(f"Error initializing Tortoise ORM: {e}")
-        raise
-
-    try:
-        await Tortoise.generate_schemas()
-        logger.info("Tortoise ORM schemas generated successfully")
-        await create_full_text_index()
-    except Exception as e:
-        logger.error(f"Error generating Tortoise ORM schemas: {e}")
-        raise
+    await Tortoise.init(
+        db_url=f'postgres://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@postgres:5432/{settings.POSTGRES_DB}',
+        modules={'models': ['app.db.videos']},
+    )
+    await Tortoise.generate_schemas()
+    await create_full_text_index()
 
 
 async def create_full_text_index():
@@ -41,4 +27,3 @@ async def startup():
 
 async def shutdown():
     await Tortoise.close_connections()
-

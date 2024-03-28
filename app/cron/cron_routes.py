@@ -1,12 +1,12 @@
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from fastapi import APIRouter, HTTPException
-from apscheduler.schedulers.background import BackgroundScheduler
 from app.cron.schemas import StartCronRequest
 from app.utils.settings import settings
 from app.utils.youtube_helper import YoutubeHelper
 
 cron_router = APIRouter()
-scheduler = BackgroundScheduler()
+scheduler = AsyncIOScheduler()
 youtube_helper = YoutubeHelper()
 
 
