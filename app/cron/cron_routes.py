@@ -1,3 +1,4 @@
+import apscheduler.schedulers
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from fastapi import APIRouter, HTTPException
@@ -41,7 +42,10 @@ async def start_cron(payload: StartCronRequest):
 
 
 def stop_cron():
-    scheduler.shutdown(wait=True)
+    try:
+        scheduler.shutdown(wait=True)
+    except Exception:
+        print("Scheduler already stopped!")
     print("Cron scheduler stopped successfully")
 
 
