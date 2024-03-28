@@ -11,6 +11,13 @@ api_router = APIRouter()
 
 @api_router.get('/fetch')
 async def fetch_results(page: int = Query(1, ge=1)):
+    """
+    :param page:
+    :return: results in dict in descending order of published_at
+
+     Route to fetch all results in dB.
+
+    """
     page_size = settings.PAGE_SIZE
     try:
         videos = await Videos.filter().order_by('-published_at').all().values()
@@ -33,6 +40,11 @@ async def fetch_results(page: int = Query(1, ge=1)):
 
 @api_router.get('/search')
 async def search_results(query: str, page: int = Query(1, ge=1)):
+    """
+    :param query:
+    :param page: results in dict in descending order of published_at
+    :return:
+    """
     page_size = settings.PAGE_SIZE
     processed_query = ' | '.join(re.findall(r'\w+', query.lower()))
     try:

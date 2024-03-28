@@ -8,6 +8,9 @@ class StartCronRequest(BaseModel):
     search_key: str = Field(..., title="Search Key", description="Search key for fetching data",
                             example="racing cars")
 
+    """
+    Validators for both the keys
+    """
     @field_validator('cron_interval')
     def validate_cron_interval(cls, value):
         try:

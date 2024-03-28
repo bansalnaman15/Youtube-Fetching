@@ -12,8 +12,8 @@ async def root():
     return {"message": "Hi, The server is up and running"}
 
 
-app.include_router(cron_router, prefix="/cron")
-app.include_router(api_router, prefix="/api")
+app.include_router(cron_router, prefix="v1/cron")
+app.include_router(api_router, prefix="v1/api")
 
 
 @app.on_event("startup")
