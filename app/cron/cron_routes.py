@@ -10,11 +10,6 @@ scheduler = BackgroundScheduler()
 youtube_helper = YoutubeHelper()
 
 
-@cron_router.get('/')
-def test_router():
-    return {"message": "Hello from cron router"}
-
-
 @cron_router.post('/start-cron')
 async def start_cron(payload: StartCronRequest):
     jobs = scheduler.get_jobs()
@@ -32,12 +27,6 @@ async def start_cron(payload: StartCronRequest):
     scheduler.start()
     return {"detail": f"Cron scheduler started successfully with cron interval '{cron_interval}' "
                       f"and search key '{search_key}'"}
-
-
-@cron_router.post('/stop-cron')
-def stop_cron_endpoint():
-    stop_cron()
-    return {"detail": "Cron scheduler stopped successfully"}
 
 
 def stop_cron():
@@ -66,6 +55,7 @@ async def modify_cron(payload: StartCronRequest):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to modify cron scheduler: {str(e)}")
+
 
 @cron_router.post('/stop-cron')
 def stop_cron_endpoint():
